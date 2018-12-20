@@ -6,6 +6,11 @@ import Category from './views/Category.vue'
 import Shopcar from './views/Shopcar.vue'
 import Me from './views/Me.vue'
 
+// 商品分类
+import GoodsList from './views/GoodsList.vue'
+// 商品详情
+import GoodsInfo from './views/GoodsInfo.vue'
+
 // 个人中心
 import myorder from './components/me/myorder.vue'
 import addressList from './components/me/addressList.vue'
@@ -34,7 +39,17 @@ export default new Router({
     {
       path: '/category',
       name: 'category',
-      component: Category
+      component: Category,
+    },
+    {
+      path: '/goodsList/:id',
+      name: 'goodsList',
+      component: GoodsList,
+    },
+    {
+      path: '/goodsInfo/:id',
+      name: 'goodsInfo',
+      component: GoodsInfo,
     },
     {
       path: '/me',

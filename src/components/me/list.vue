@@ -12,11 +12,14 @@
           <a>账号管理</a>
         </div>
     </div>
+
     <van-cell-group>
       <van-cell value="我的订单" @click="redirect('MyOrder')"/>
       <van-cell value="密码重置" @click="redirect('PwdReset')"/>
       <van-cell value="我的地址" @click="redirect('AddressList')"/>
     </van-cell-group>
+
+    <van-button type="danger" size="large">退出</van-button>
 </div>
 </template>
 
@@ -71,5 +74,10 @@ export default {
       flex:1;
       padding-top:20px;
     }
+  }
+
+  button{
+    width:90%;
+    margin-top:50px;
   }
 </style>
