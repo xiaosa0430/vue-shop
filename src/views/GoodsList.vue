@@ -8,20 +8,10 @@
     />
     
     <div class="items">
-        <div class="item" @click="goInfo(1)">
-            <img src="../assets/images/3.png" alt="">
-            <p>商品名称: <span>iphoneX</span></p>
-            <p>市场价: <span>998.00</span></p>
-        </div>
-        <div class="item" @click="goInfo(2)">
-            <img src="../assets/images/3.png" alt="">
-            <p>商品名称: <span>iphoneX</span></p>
-            <p>市场价: <span>998.00</span></p>
-        </div>
-        <div class="item" @click="goInfo(3)">
-            <img src="../assets/images/3.png" alt="">
-            <p>商品名称: <span>iphoneX</span></p>
-            <p>市场价: <span>998.00</span></p>
+        <div class="item" @click="goInfo(item.id)" v-for="(item,index) in goodsList" :key="index">
+            <img :src="item.cover_img" alt="">
+            <p>商品名称: <span>{{item.name}}</span></p>
+            <p>市场价: <span>{{item.sale_price}}</span></p>
         </div>
     </div>
    
@@ -32,8 +22,23 @@
 export default {
     data(){
         return{
-
+            goodsList:[]
         }
+    },
+    created(){
+        const id = this.$route.params.id
+        this.$http.get("/v1/goods/getGoodsList",{
+            params:{
+                cateId:id,
+                page:1,
+                pageSize:10
+            }}
+        ).then(res=>{
+            if(res.data.status==200){
+                this.goodsList = res.data.data.goods;
+                
+            }
+        })
     },
     methods:{
         onClickLeft(){

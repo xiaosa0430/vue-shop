@@ -9,13 +9,13 @@
     />
     <div class="detail">
         <div class="img" @click="showImagePreview">
-            <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2322385387,3115581809&fm=11&gp=0.jpg" alt="">
+            <img :src="goodsInfo.big_img[0]" alt="">
         </div>
         <div class="info">
-            <div class="name">商品名称: <span>xxxxx</span> </div>
-            <div class="price">商品价格: <span>1213.00</span> </div>
+            <div class="name">商品名称: <span>{{goodsInfo.name}}</span> </div>
+            <div class="price">商品价格: <span>{{goodsInfo.sale_price}}</span> </div>
             <div class="number">购买数量: <van-stepper v-model="number"/></div>
-            <div class="text">购买详情:xxxxxxxxx</div>
+            <div class="text">商品描述: {{goodsInfo.description}}</div>
         </div>
     </div>
 
@@ -51,8 +51,18 @@ Vue.use(Toast);
 export default {
     data(){
         return{
-           number:1
+           number:1,
+           goodsInfo:[]
         }
+    },
+    created(){
+        const id = this.$route.params.id;
+
+        this.$http.get('/v1/goods/getGoodsInfo/'+id).then(res=>{
+            if(res.data.status==200){
+               this.goodsInfo = res.data.data;
+            }
+        })
     },
     methods:{
         onClickLeft(){
@@ -65,10 +75,7 @@ export default {
             Toast('点击按钮');
         },
         showImagePreview(){
-            ImagePreview([
-            'https://img.yzcdn.cn/2.jpg',
-            'https://img.yzcdn.cn/2.jpg'
-            ]);
+            ImagePreview(this.goodsInfo.big_img);
         }
     }
 }
@@ -80,6 +87,10 @@ export default {
         padding-top:10px;
         .img{
             // background-color:#ccc;
+            img{
+                width:100%;
+                height:300px;
+            }
         }
         .info{
             div{

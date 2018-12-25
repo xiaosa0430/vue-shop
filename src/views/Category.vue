@@ -1,21 +1,17 @@
 <template>
 <div class="category">
       <!-- Tab 标签滑块 -->
-    <van-tabs>
+    <van-tabs @click="onClick">
       <van-tab 
-        v-for="index in 8" 
-        :title="'一级分类 ' + index" 
+        v-for="(item,index) in category" 
+        :title="item.name" 
         :key="index"
         class="tab">
 
-        二级分类 {{ index }}
         <div class="subCate">
-          <img src="../assets/images/bg.jpg" alt="" @click="goList(1)">
-          <img src="../assets/images/bg.jpg" alt="" @click="goList(2)">
-          <img src="../assets/images/bg.jpg" alt="" @click="goList(3)" >
-          <img src="../assets/images/bg.jpg" alt="" @click="goList(4)">
+          <img src="../assets/images/bg.jpg" alt="" @click="goList(item.id)" v-for="(item,index) in imgList" :key="index">
         </div>
-
+     
       </van-tab>
     </van-tabs>   
 
@@ -34,17 +30,43 @@ export default {
     data(){
       return {
           active:1,
+          category:[],
           imgList: [],
           loading: false,
           finished: false
       }
     },
+    created(){
+     
+      this.$http.get("/v1/goods/getGoodsCategories").then(res=>{
+       
+        if(res.data.status==200){
+            this.category = res.data.data;
+
+            this.$http.get("/v1/goods/getGoodsSubCategories/"+this.category[0].id).then(res=>{
+            if(res.data.status==200){
+               this.imgList = res.data.data;
+            }
+        })
+        }
+
+      })
+    },
     methods:{
-       onLoad() {},
-       goList(id){
+      onLoad() {},
+      goList(id){
          this.$router.push("/goodsList/"+id)
-       }
-    }
+      },
+      onClick(index, title) {
+        // this.$toast(index);
+        this.$http.get("/v1/goods/getGoodsSubCategories/"+index).then(res=>{
+            if(res.data.status==200){
+               this.imgList = res.data.data;
+            }
+        })
+      }
+    },
+
 }
 </script>
 
