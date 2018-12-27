@@ -18,7 +18,7 @@
             required
         />
     </van-cell-group>
-    <van-button type="danger" size="large">登录</van-button>
+    <van-button type="danger" size="large" @click="login">登录</van-button>
     <div class="reg">
         未注册 ? <a href="javascript:;" @click="register">去注册</a>
     </div>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import qs from 'qs'
+
 export default {
     data(){
         return{
@@ -36,6 +38,24 @@ export default {
     methods:{
         register(){
             this.$router.push('/me/register');
+        },
+        login(){
+            const userInfo = {
+                username:this.username,
+                password:this.password
+            };
+            const userStr = qs.stringify(userInfo)
+            this.$http.post("/v1/users/login",userStr).then(res=>{
+                if(res.data.status==200){
+                    this.$toast.success('登录成功')
+                    localStorage.setItem("token",res.data.data.token);
+                    setTimeout(()=>{
+                        this.$router.push('/me/list');
+                    },1000)
+                }else{
+                    this.$toast.fail('登录失败,请重新登录')
+                }
+            })
         }
     }
 }

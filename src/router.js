@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Home from './views/Home.vue'
 import Category from './views/Category.vue'
+import news from './views/news.vue'
 import Shopcar from './views/Shopcar.vue'
 import Me from './views/Me.vue'
 
@@ -18,7 +19,20 @@ import pwdReset from './components/me/pwdReset.vue'
 import list from './components/me/list.vue'
 import login from './components/me/login.vue'
 import register from './components/me/register.vue'
+import account from './components/me/account.vue'
+import addressAdd from './components/me/addressAdd.vue'
+import addressEdit from './components/me/addressEdit.vue'
 Vue.use(Router)
+
+function checkLogin(next){
+  const token  = localStorage.getItem('token');
+  if(token){
+     next();
+  }else{
+     next('/me/login')
+  }
+
+}
 
 export default new Router({
   routes: [
@@ -30,6 +44,11 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: Home,
+    },
+    {
+      path: '/news',
+      name: 'news',
+      component: news,
     },
     {
       path: '/shopcar',
@@ -58,7 +77,10 @@ export default new Router({
       children:[
         {
           path: 'list',
-          component: list
+          component: list,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
         },
         {
           path: 'login',
@@ -66,19 +88,59 @@ export default new Router({
         },
         {
           path: 'register',
-          component: register
+          component: register,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
         },
         {
           path:'myorder',
-          component:myorder
+          component: myorder,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
         },
         {
           path: 'addressList',
-          component: addressList
+          component: addressList,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
         },
         {
           path: 'pwdReset',
-          component: pwdReset
+          component: pwdReset,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
+        },
+        {
+          path: 'pwdReset',
+          component: pwdReset,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
+        },
+        {
+          path: 'account',
+          component: account,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
+        },
+        {
+          path: 'addressAdd',
+          component: addressAdd,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
+        }, 
+        {
+          path: 'addressEdit/:id',
+          component: addressEdit,
+          beforeEnter: (to, from, next) => {
+            checkLogin(next)
+          }
         }
       ]
     }

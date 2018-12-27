@@ -23,8 +23,8 @@
 
     <!--轮播图组件  -->
     <van-swipe :autoplay="3000">
-      <van-swipe-item v-for="(image, index) in images" :key="index">
-        <img :src="image" style="width:100%"/>
+      <van-swipe-item v-for="(item, index) in bannerImages" :key="index">
+        <img :src="item.img" style="width:100%"/>
       </van-swipe-item>
     </van-swipe>
 
@@ -82,8 +82,9 @@
 
     <!-- 分类tabBar -->
     <van-tabbar v-model="active">
-      <van-tabbar-item icon="wap-home"  to="/">首页</van-tabbar-item>
-      <van-tabbar-item icon="pending-evaluate" dot to="/category">分类</van-tabbar-item>
+      <van-tabbar-item icon="wap-home" to="/">首页</van-tabbar-item>
+      <van-tabbar-item icon="pending-evaluate" to="/category">分类</van-tabbar-item>
+      <van-tabbar-item icon="search" dot to="/news">新闻</van-tabbar-item>
       <van-tabbar-item icon="shopping-cart" info="5" to="/shopcar">购物车</van-tabbar-item>
       <van-tabbar-item icon="contact" to="/me">我的</van-tabbar-item>
     </van-tabbar>
@@ -100,15 +101,20 @@ export default {
     return {
       value:"",
       active:0,
-      images: [
+      bannerImages: [
         'https://img.yzcdn.cn/2.jpg',
         'https://img.yzcdn.cn/2.jpg'
       ]
     }
   },
   name: 'home',
-  components: {
-    // HelloWorld
+  created(){
+    this.$http.get('v1/home/getBanners').then(res=>{
+      // console.log(res);
+      if(res.data.status==200){
+        this.bannerImages = res.data.data;
+      }
+    })
   }
 }
 </script>

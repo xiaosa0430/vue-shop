@@ -11,7 +11,8 @@
     
     <van-tabbar v-model="active">
       <van-tabbar-item icon="wap-home" to="/">首页</van-tabbar-item>
-      <van-tabbar-item icon="pending-evaluate" dot to="/category">分类</van-tabbar-item>
+      <van-tabbar-item icon="pending-evaluate" to="/category">分类</van-tabbar-item>
+      <van-tabbar-item icon="search" dot to="/news">新闻</van-tabbar-item>
       <van-tabbar-item icon="shopping-cart" info="5" to="/shopcar">购物车</van-tabbar-item>
       <van-tabbar-item icon="contact" to="/me">我的</van-tabbar-item>
     </van-tabbar>
@@ -22,7 +23,7 @@
 export default {
   data(){
     return {
-        active:3,
+        active:4,
         flag:false,
         str:""
     }

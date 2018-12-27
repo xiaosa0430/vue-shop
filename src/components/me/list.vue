@@ -5,11 +5,11 @@
            <img src="../../assets/images/default.jpg" alt="">
         </div>
         <div class="info">
-          <p>用户名称:xxx211</p>
-          <p>用户等级:白金用户</p>
+          <p>用户名称:{{userInfo.username}}</p>
+          <p>用户手机:{{userInfo.mobile}}</p>
         </div>
         <div class="account">
-          <a>账号管理</a>
+          <a href='javascript:;' @click="account">账号管理</a>
         </div>
     </div>
 
@@ -19,12 +19,25 @@
       <van-cell value="我的地址" @click="redirect('AddressList')"/>
     </van-cell-group>
 
-    <van-button type="danger" size="large">退出</van-button>
+    <van-button type="danger" size="large" @click="logout">退出</van-button>
 </div>
 </template>
 
 <script>
 export default {
+  data(){
+    return {
+      userInfo:{}
+    }
+  },
+  created(){
+    this.$http.get('/v1/users/getUserInfo').then(res=>{
+      // console.log(res)
+      if(res.data.status==200){
+        this.userInfo = res.data.data;
+      }
+    })
+  },
   methods:{
     redirect(str){
       if(str=="MyOrder"){
@@ -34,6 +47,13 @@ export default {
       }else if(str=="AddressList"){
         this.$router.push("/me/addressList")
       }
+    },
+    account(){
+      this.$router.push('/me/account')
+    },
+    logout(){
+      localStorage.setItem('token','');
+      this.$router.push('/me/login');
     }
   }
 }
@@ -73,6 +93,9 @@ export default {
     .account{
       flex:1;
       padding-top:20px;
+      a{
+        color:white;
+      }
     }
   }
 

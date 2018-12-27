@@ -2,7 +2,9 @@
 <div>
     <van-address-list
     v-model="chosenAddressId"
-    :list="list"
+    :list="addressList"
+    @add="onAdd"
+    @edit="onEdit"
     />
 </div>
 </template>
@@ -12,24 +14,32 @@ export default {
     data(){
         return {
             chosenAddressId: '1',
-            list: [
-                {
-                id: '1',
-                name: '张三',
-                tel: '13000000000',
-                address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室'
-                },
-                {
-                id: '2',
-                name: '李四',
-                tel: '1310000000',
-                address: '浙江省杭州市拱墅区莫干山路 50 号'
-                }
-            ],
+            addressList: [],
         }
     },
-    methods:{
-        
+    created(){
+        this.$http.get('/v1/users/getReceiverAddress').then(res=>{
+            // console.log(res);
+            if(res.data.status==200){
+                // this.addressList = res.data.data
+                res.data.data.forEach((value,index)=>{
+                    this.addressList.push({
+                        id: value.id,
+                        name: value.receiver_name,
+                        tel: value.mobile,
+                        address: value.province+value.city+value.area+value.detailed_address
+                    })
+                })
+            }
+        })
+    },
+    methods: {
+        onAdd() {
+            this.$router.push('/me/addressAdd');
+        },
+        onEdit(item, index){
+           this.$router.push('/me/addressEdit/'+item.id)
+        }
     }
     
 }

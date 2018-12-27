@@ -59,7 +59,6 @@ export default {
         }
     },
     created(){
-        console.log(this)
         this.showvCode();
     },
     methods:{
@@ -76,6 +75,7 @@ export default {
         checkUsername(){
             // console.log(this.username);
             this.$http.get("/v1/users/checkUsername/"+this.username).then(res=>{
+        
                 if(res.data.status==200){
                     Toast('用户名可用')
                 }else{
@@ -95,9 +95,12 @@ export default {
             };
             const userStr = qs.stringify(userInfo)
             this.$http.post("/v1/users/register",userStr).then(res=>{
-                // console.log(res);
-                if(res.status==200){
-                    
+                if(res.data.status==200){
+                    Toast('注册成功')
+                    localStorage.setItem("token",res.data.data.token);
+                    setTimeout(function(){
+                        this.$router.push('/me/list');
+                    },1000) 
                 }
             })
 
