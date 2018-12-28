@@ -7,6 +7,8 @@ import news from './views/news.vue'
 import Shopcar from './views/Shopcar.vue'
 import Me from './views/Me.vue'
 
+// 新闻详情
+import newsInfo from './views/newsInfo.vue'
 // 商品分类
 import GoodsList from './views/GoodsList.vue'
 // 商品详情
@@ -49,6 +51,11 @@ export default new Router({
       path: '/news',
       name: 'news',
       component: news,
+    },
+    {
+      path: '/newsInfo/:id',
+      name: 'newsInfo',
+      component: newsInfo,
     },
     {
       path: '/shopcar',
