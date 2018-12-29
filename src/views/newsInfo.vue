@@ -50,7 +50,7 @@ export default {
 .newsInfo{
     .header{
         width:100%;
-        height:50px;
+        // height:50px;
         border-bottom:1px solid #ccc;
         padding:5px;
         .title{

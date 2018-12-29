@@ -9,7 +9,7 @@
     />
     <div class="detail">
         <div class="img" @click="showImagePreview">
-            <img :src="goodsInfo.big_img[0]" alt="">
+            <img :src="img" alt="">
         </div>
         <div class="info">
             <div class="name">商品名称: <span>{{goodsInfo.name}}</span> </div>
@@ -28,39 +28,50 @@
         <van-goods-action-mini-btn
             icon="cart-o"
             text="购物车"
-            @click="onClickMiniBtn"
+            @click="goShopcar"
         />
         <van-goods-action-big-btn
             text="加入购物车"
-            @click="onClickBigBtn"
+            @click="addShopcar"
         />
         <van-goods-action-big-btn
             primary
             text="立即购买"
             @click="onClickBigBtn"
         />
+        <transition
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @after-enter="afterEnter">
+            <div class="ball" v-show="ballFlag" ref="ball"></div>
+        </transition>
     </van-goods-action>
+
+    <!-- <transition
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @after-enter="afterEnter"> -->
+    <!-- </transition> -->
 </div>
 </template>
 
 <script>
 import { ImagePreview } from 'vant';
-import Vue from 'vue'
-import { Toast } from 'vant';
-Vue.use(Toast);
 export default {
     data(){
         return{
+           goodsId:this.$route.params.id,
            number:1,
-           goodsInfo:[]
+           goodsInfo:[],
+           img:"",
+           ballFlag:false
         }
     },
     created(){
-        const id = this.$route.params.id;
-
-        this.$http.get('/v1/goods/getGoodsInfo/'+id).then(res=>{
+        this.$http.get('/v1/goods/getGoodsInfo/'+this.goodsId).then(res=>{
             if(res.data.status==200){
                this.goodsInfo = res.data.data;
+               this.img = this.goodsInfo.big_img[0];
             }
         })
     },
@@ -69,14 +80,38 @@ export default {
             this.$router.go(-1);
         },
         onClickMiniBtn() {
-            Toast('点击图标');
+            this.$toast('点击图标');
         },
         onClickBigBtn() {
-            Toast('点击按钮');
+            this.$toast('点击按钮');
+        },
+        addShopcar(){
+            this.$http.post('v1/cart/postGoodsToCart/'+this.goodsId,{count:this.number})
+            .then(res=>{
+                if(res.data.status==200){
+                    // this.$toast.success("添加到购物车成功")
+                    this.ballFlag = !this.ballFlag;
+                }
+            })
+        },
+        goShopcar(){
+            this.$router.push('/shopcar')
         },
         showImagePreview(){
             ImagePreview(this.goodsInfo.big_img);
-        }
+        },
+        beforeEnter(el) {
+            el.style.transform = "translate(0, 0)";
+        },
+        enter(el, done) {
+            el.offsetWidth;
+            el.style.transform = "translateX(-100px)";
+            el.style.transition = "all 2s cubic-bezier(0,1.57,.95,.01)";
+            done();
+        },
+        afterEnter(el) {
+            this.ballFlag = !this.ballFlag;
+        },  
     }
 }
 </script>
@@ -113,6 +148,19 @@ export default {
             }
         }
     }
+    .van-goods-action{
+        .ball {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: red;
+            position: absolute;
+            z-index: 99;
+            bottom:18px;
+            left:40%;
+        }
+    }
+    
 }
 </style>
 
