@@ -38,9 +38,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { Toast } from 'vant';
-Vue.use(Toast);
 
 export default {
     data(){
@@ -52,8 +49,8 @@ export default {
     },
     created(){
         var info = {
-            page:this.pageIndex,
-            pageSize:this.pageSize
+            page:1,
+            pageSize:1000
         }
         this.$http.get('v1/cart/getGoodsFromCart',{params:info}).then(res=>{
             console.log(res);
@@ -64,7 +61,7 @@ export default {
           this.$router.go(-1);
        },
        onSubmit(){
-           Toast('提交');
+           this.$toast('提交');
        }
    }
 }
