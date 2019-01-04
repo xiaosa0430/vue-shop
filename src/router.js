@@ -60,7 +60,10 @@ export default new Router({
     {
       path: '/shopcar',
       name: 'shopcar',
-      component: Shopcar
+      component: Shopcar,
+      beforeEnter: (to, from, next) => {
+        checkLogin(next)
+      }
     },
     {
       path: '/category',

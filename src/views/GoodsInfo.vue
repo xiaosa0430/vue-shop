@@ -28,7 +28,6 @@
         <van-goods-action-mini-btn
             icon="cart-o"
             text="购物车"
-            :info="shopcarCount"
             @click="goShopcar"
         />
         <van-goods-action-big-btn
@@ -63,7 +62,6 @@ export default {
         return{
            goodsId:this.$route.params.id,
            number:1,
-           shopcarCount:this.$store.getters.getCount,
            goodsInfo:[],
            img:"",
            ballFlag:false
@@ -88,16 +86,27 @@ export default {
             this.$toast('点击按钮');
         },
         addShopcar(){
-            // this.$http.post('v1/cart/postGoodsToCart/'+this.goodsId,{count:this.number})
-            // .then(res=>{
-            //     if(res.data.status==200){
-            //         // this.$toast.success("添加到购物车成功")
-            //         this.ballFlag = !this.ballFlag;
-            //     }
-            // })
-            this.ballFlag = !this.ballFlag;
+            var token = localStorage.getItem('token')
+            if(token){
+                this.$http.post('v1/cart/postGoodsToCart/'+this.goodsId,{count:this.number})
+                .then(res=>{
+                    if(res.data.status==200){
+                        // this.$toast.success("添加到购物车成功")
+                        this.ballFlag = !this.ballFlag;
+                    }
+                })
+            }else{
+                this.$dialog.confirm({
+                    title: '立即登录?',
+                }).then(()=>{
+                    this.$router.push('/me/login')
+                }).catch(()=>{
+                    return
+                });
+            }
+            // this.ballFlag = !this.ballFlag;
             
-            this.$store.commit('addToShopcar',{id:this.goodsId,count:this.number})
+            // this.$store.commit('addToShopcar',{id:this.goodsId,count:this.number})
 
         },
         goShopcar(){

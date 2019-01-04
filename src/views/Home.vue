@@ -85,7 +85,7 @@
       <van-tabbar-item icon="wap-home" to="/">首页</van-tabbar-item>
       <van-tabbar-item icon="pending-evaluate" to="/category">分类</van-tabbar-item>
       <van-tabbar-item icon="search" dot to="/news">新闻</van-tabbar-item>
-      <van-tabbar-item icon="shopping-cart" :info="shopcarCount" to="/shopcar">购物车</van-tabbar-item>
+      <van-tabbar-item icon="shopping-cart" to="/shopcar">购物车</van-tabbar-item>
       <van-tabbar-item icon="contact" to="/me">我的</van-tabbar-item>
     </van-tabbar>
 
@@ -102,10 +102,7 @@ export default {
       value:"",
       active:0,
       shopcarCount:this.$store.getters.getCount,
-      bannerImages: [
-        'https://img.yzcdn.cn/2.jpg',
-        'https://img.yzcdn.cn/2.jpg'
-      ]
+      bannerImages: []
     }
   },
   name: 'home',
